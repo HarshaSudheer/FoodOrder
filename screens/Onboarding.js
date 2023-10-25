@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { validateEmail } from "../utils/validation";
 
-const Onboarding = ({ navigation, route }) => {
+const Onboarding = ({ route }) => {
     const [firstName, setFirstName] = useState("");
     const [email, setEmail] = useState("");
     const [enableNext, setEnableNext] = useState(false);
@@ -17,6 +17,15 @@ const Onboarding = ({ navigation, route }) => {
             setEnableNext(false);
         }
     }, [firstName, email]);
+
+    const handleNext = async () => {
+        try {
+            await AsyncStorage.multiSet([["email", email], ["firstName", firstName]]);
+            route.params.setEmailStored(email);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -32,6 +41,7 @@ const Onboarding = ({ navigation, route }) => {
                         style={styles.input}
                         value={firstName}
                         onChangeText={setFirstName}
+                        placeholder="First name"
                     />
                     <Text style={styles.formLabel}>Email</Text>
                     <TextInput
@@ -39,11 +49,12 @@ const Onboarding = ({ navigation, route }) => {
                         value={email}
                         onChangeText={setEmail}
                         keyboardType="email-address"
+                        placeholder="email"
                     />
                 </View>
             </View>
             <View style={styles.buttonContainer}>
-                <Pressable disabled={!enableNext} style={enableNext ? styles.buttonEnable : styles.button} onPress={() => { route.params.saveEmail(email) }}>
+                <Pressable disabled={!enableNext} style={enableNext ? styles.buttonEnable : styles.button} onPress={handleNext}>
                     <Text style={{ textAlign: "center" }}>Next</Text>
                 </Pressable>
             </View>

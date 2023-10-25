@@ -15,25 +15,12 @@ export default function App() {
   const [isOnboardingCompleted, setIsOnboardingCompleted] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getAndSaveEmail = async () => {
+  const fetchEmail = async () => {
     try {
       const userEmail = await AsyncStorage.getItem("email");
-      // await AsyncStorage.clear();
       setEmailStored(userEmail);
     }
     catch (err) {
-      console.log(err);
-    }
-  }
-
-  const saveEmail = async (userEmail) => {
-    try {
-      await AsyncStorage.setItem(
-        'email',
-        userEmail,
-      );
-      setEmailStored(userEmail);
-    } catch (err) {
       console.log(err);
     }
   }
@@ -50,11 +37,13 @@ export default function App() {
   }
 
   useEffect(() => {
-    getAndSaveEmail();
+    fetchEmail();
   }, []);
 
   useEffect(() => {
-    handleOnboarding();
+    if(emailStored !== ""){
+      handleOnboarding();
+    }
   }, [emailStored]);
 
   if (isLoading) {
@@ -63,12 +52,11 @@ export default function App() {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator
-        initialRouteName="Onboarding">
+      <Stack.Navigator>
         {isOnboardingCompleted ?
-          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Profile" component={Profile} options={{ headerTitle: () => <Image style={{height: 50, width: 200}} source={require("./assets/images/title.png")}/> }} initialParams={{ setEmailStored: setEmailStored }}/>
           :
-          <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} initialParams={{ saveEmail: saveEmail }} />
+          <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} initialParams={{ setEmailStored: setEmailStored }} />
         }
       </Stack.Navigator>
     </NavigationContainer>
