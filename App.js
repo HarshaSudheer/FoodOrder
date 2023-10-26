@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import Splash from './screens/Splash';
 import Onboarding from './screens/Onboarding';
+import Home from './screens/Home';
 import Profile from './screens/Profile';
 
 const Stack = createNativeStackNavigator();
@@ -41,9 +42,7 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if(emailStored !== ""){
       handleOnboarding();
-    }
   }, [emailStored]);
 
   if (isLoading) {
@@ -54,10 +53,11 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {isOnboardingCompleted ?
-          <Stack.Screen name="Profile" component={Profile} options={{ headerTitle: () => <Image style={{height: 50, width: 200}} source={require("./assets/images/title.png")}/> }} initialParams={{ setEmailStored: setEmailStored }}/>
+          <Stack.Screen name="Home" component={Home} options={{ headerTitle: () => <Image style={{height: 50, width: 200}} source={require("./assets/images/title.png")}/> }}/>
           :
           <Stack.Screen name="Onboarding" component={Onboarding} options={{ headerShown: false }} initialParams={{ setEmailStored: setEmailStored }} />
         }
+        {isOnboardingCompleted && <Stack.Screen name="Profile" component={Profile} options={{ headerTitle: () => <Image style={{height: 50, width: 200}} source={require("./assets/images/title.png")}/> }} initialParams={{ setEmailStored: setEmailStored }}/>}
       </Stack.Navigator>
     </NavigationContainer>
   );
