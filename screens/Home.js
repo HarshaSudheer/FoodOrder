@@ -81,9 +81,9 @@ const Home = ({ navigation }) => {
 
     const fetchDataApi = async () => {
         try {
-            // const response = await fetch("https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json");
-            // const json = await response.json();
-            // const menu = json.menu;
+            const response = await fetch("https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/capstone.json");
+            const json = await response.json();
+            const menu = json.menu;
             return menu;
         }
         catch (err) {
@@ -145,8 +145,8 @@ const Home = ({ navigation }) => {
                         <Text style={{ width: 250, fontSize: 16, marginVertical: 10 }}>{description}</Text>
                         <Text style={{ fontSize: 18, fontWeight: "500" }}>{price}</Text>
                     </View>
-                    {/* <Image source={{uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}raw=true`}}/> */}
-                    <Image style={{ width: 100, height: 120, alignSelf: "center" }} source={require("../assets/images/food.png")} />
+                    <Image style={{ width: 100, height: 120, alignSelf: "center" }} source={{uri: `https://github.com/Meta-Mobile-Developer-PC/Working-With-Data-API/blob/main/images/${image}raw=true`}}/>
+                    {/* <Image style={{ width: 100, height: 120, alignSelf: "center" }} source={require("../assets/images/food.png")} /> */}
                 </View>
             </View>
         );
@@ -178,7 +178,6 @@ const Home = ({ navigation }) => {
     }, []);
 
     useEffect(() => {
-        console.log(data)
         if(data){
             let activeCategoriesArg = activeCategories
             if (!activeCategoriesArg.length) {
