@@ -9,8 +9,8 @@ const Profile = ({ navigation, route }) => {
     const [initials, setInitials] = useState("HS");
 
     const [email, setEmail] = useState("");
-    const [firstName, setFirstName] = useState(null);
-    const [lastName, setLastName] = useState(null);
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
     const [phNumber, setPhNumber] = useState("");
 
     const [isOrderStatusesSelected, setIsOrderStatusesSelected] = useState(false);
@@ -45,15 +45,25 @@ const Profile = ({ navigation, route }) => {
         }
     }
 
-    const fetchInitials = () => {
-        let userIntitals = "";
-        if (firstName !== null) {
-            userIntitals = firstName[0];
-            setInitials(userIntitals);
+    const fetchInitials = async () => {
+        try {
+            const nameArr = await AsyncStorage.multiGet(["firstName", "lastName"]);
+            const nameObj = nameArr.reduce((obj, [key, value]) => {
+                obj[key] = value;
+                return obj;
+            }, {});
+            let userIntitals = "";
+            if (nameObj.firstName !== null) {
+                userIntitals = nameObj.firstName[0];
+                setInitials(userIntitals);
+            }
+            if (nameObj.lastName !== null) {
+                userIntitals += nameObj.lastName[0]
+                setInitials(userIntitals);
+            }
         }
-        if (lastName !== null) {
-            userIntitals += lastName[0]
-            setInitials(userIntitals);
+        catch (err) {
+            console.log(err);
         }
     }
 
